@@ -26,7 +26,10 @@ module.exports = {
     /*
      ** Global CSS
      */
-    css: [],
+    css: [
+        "bootstrap-css-only/css/bootstrap.min.css",
+        "mdbvue/lib/css/mdb.min.css"
+    ],
     /*
      ** Plugins to load before mounting the App
      */
@@ -38,7 +41,22 @@ module.exports = {
     /*
      ** Nuxt.js modules
      */
-    modules: ["nuxt-fontawesome"],
+    modules: [
+        [
+            "nuxt-fontawesome",
+            {
+                imports: [{
+                        set: "@fortawesome/free-solid-svg-icons",
+                        icons: ["fas"]
+                    },
+                    {
+                        set: "@fortawesome/free-brands-svg-icons",
+                        icons: ["fab"]
+                    }
+                ]
+            }
+        ]
+    ],
     fontawesome: {
         imports: [{
                 set: "@fortawesome/free-solid-svg-icons", // Solid icons
@@ -82,6 +100,9 @@ module.exports = {
                     success: colors.green.accent3
                 }
             }
+        },
+        icons: {
+            iconfont: "faSvg"
         }
     },
     /*
@@ -91,6 +112,7 @@ module.exports = {
         /*
          ** You can extend webpack config here
          */
-        extend(config, ctx) {}
+        extend(config, ctx) {},
+        transpile: ["mdbvue/lib/components"]
     }
 };
