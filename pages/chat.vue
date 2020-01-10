@@ -1,13 +1,13 @@
-<template>
-  <v-container class="grey lighten-5">
+<template id="chat_router" color="primary">
+  <v-container class="grey lighten-5 p-0" >
     <v-row class="mb-6" no-gutters>
-      <v-col md="4">
-        <v-card class="pa-2" outlined tile>
+      <v-col md="4" >
+        <v-card class="pa-2" style="height:700px" outlined tile id="nav_chat">
           <NavChat />
         </v-card>
       </v-col>
       <v-col md="8">
-        <v-card class="pa-2" outlined tile>
+        <v-card class="pa-2" style="height:700px" outlined tile>
           <ChatArea />
           <div>
             <p>Icons</p>
@@ -21,7 +21,15 @@
     </v-row>
   </v-container>
 </template>
-
+<style >
+.v-content >>> .v-content__wrap{
+    background: #271C45
+}
+#nav_chat{
+  background: #5F479F;
+  font-family: 'Josefin Sans', sans-serif !important;
+}
+</style>
 <script>
 import VuetifyLogo from "~/components/VuetifyLogo.vue";
 import ChatArea from "~/components/ChatArea.vue";

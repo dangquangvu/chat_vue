@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <v-row
-        class="d-flex"
-        no-gutters
-      >
+    <v-row class="d-flex mb-0">
       <UserChat />
       <FriendChat />
       <FriendChat />

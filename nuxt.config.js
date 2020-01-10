@@ -28,7 +28,8 @@ module.exports = {
      */
     css: [
         "bootstrap-css-only/css/bootstrap.min.css",
-        "mdbvue/lib/css/mdb.min.css"
+        "mdbvue/lib/css/mdb.min.css",
+        "~/assets/css/main.css"
     ],
     /*
      ** Plugins to load before mounting the App
@@ -88,7 +89,7 @@ module.exports = {
     vuetify: {
         customVariables: ["~/assets/variables.scss"],
         theme: {
-            dark: false,
+            violet: true,
             themes: {
                 dark: {
                     primary: colors.blue.darken2,
@@ -98,6 +99,9 @@ module.exports = {
                     warning: colors.amber.base,
                     error: colors.deepOrange.accent4,
                     success: colors.green.accent3
+                },
+                violet: {
+                    primary: "#5F479F"
                 }
             }
         },
