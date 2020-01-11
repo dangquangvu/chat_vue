@@ -1,9 +1,8 @@
 <template>
-  <v-container class="p-0">
-    <v-row class=" d-flex justify-center p-0 ">
-      <v-col sm="1" class="p-0">
-      </v-col>
-      <v-col sm="2" class="p-1">
+  <v-container class="p-0 m-0">
+    <v-row class=" d-flex justify-center m-0">
+      <v-col sm="1" class="p-0"> </v-col>
+      <v-col sm="2" class="p-1 " height="50%">
         <img
           src="@/assets/user1.png"
           alt="user img"
@@ -17,33 +16,37 @@
           id="nav_dot_active"
         />
       </v-col>
-      <v-col sm="6" class="p-0">
-          <span class="d-flex ">
-            <h5>{{name}}</h5> <v-spacer/> <h6>{{time_online}}</h6>
-          </span>
-          <h6>{{msg}}</h6>
+      <v-col sm="6" class="p-0 mt-2">
+        <span class="d-flex ">
+          <h5 style="color:white">{{ friend.name }}</h5>
+          <!-- <h6
+            style="font-size:12px;margin-top:8px;font-style: italic; margin-left:15px;color: rgb(155, 155, 155);"
+          >
+            {{ time_online }}
+          </h6> -->
+        </span>
+        <h6 style="color: rgb(155, 155, 155);margin-top:-7px">{{ friend.description }}</h6>
       </v-col>
-      <v-col sm="3" class="p-0">
-
-      </v-col>
+      <v-col sm="3" class="p-0"> </v-col>
     </v-row>
   </v-container>
 </template>
 <style scoped>
 #nav_dot_active {
-  top: 11px;
-  left: -19px;
+  top: -24px;
+  left: 32px;
   position: relative;
 }
 </style>
 <script>
 export default {
-   data () {
-     return {
-       name : "user1",
-       msg : "aaaaaaa",
-       time_online : '5phut'
-     }
-   }
+  props: ["friend"],
+  data() {
+    return {
+      name: "user1",
+      msg: "aaaaaaa",
+      time_online: "5phut"
+    };
+  }
 };
 </script>
