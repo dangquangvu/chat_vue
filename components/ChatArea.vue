@@ -32,50 +32,35 @@
         </v-col>
       </v-card>
     </v-row>
-    <v-row style="" class="form_chat">
-      <v-card sm="12" pa-0 v-if="user_click.name" style="width:100%">
+    <v-row style="" v-on:scroll="onScroll" class="form_chat " id="scroll-target">
+      <v-card
+        sm="12"
+        pa-0
+        v-if="user_click.name"
+        style="width:100%"
+      >
         <div v-for="(item, index) in message" :key="index">
-          <Mymess v-if="index%2==0" :chat="item.msg" />
-          <OtherChat v-if="index%2!=0" :chat="item.msg" />
+          <Mymess v-if="index % 2 == 0" :chat="item.msg" />
+          <OtherChat v-if="index % 2 != 0" :chat="item.msg" />
         </div>
       </v-card>
     </v-row>
     <v-row style="" class="footer_chat">
-      <v-card sm="12" pa-0 height="100%" width="100%" style="background:#e5e5fe">
-        <FooterChat />
+      <v-card
+        sm="12"
+        pa-0
+        height="100%"
+        width="100%"
+        style="background:#e5e5fe"
+      >
+        <FooterChat
+          :nameFriend="user_click.name"
+          @updateMessage="updateMessage($event)"
+        />
       </v-card>
     </v-row>
   </v-container>
 </template>
-
-<style scope>
-.header_form_chat {
-  margin-right: 0px;
-  margin-left: 0px;
-  background: #e5e5fe;
-  height: 100px;
-  box-shadow: black;
-}
-.form_chat {
-  margin-right: 0px;
-  margin-left: 0px;
-  background: #ffffff;
-  height: 500px;
-  overflow-y: auto;
-}
-.footer_chat {
-  margin-right: 0px;
-  margin-left: 0px;
-  background: #e5e5fe;
-  height: 100px;
-  box-shadow: black;
-}
-#nav_dot_active {
-  top: 11px;
-  left: -19px;
-  position: relative;
-}
-</style>
 
 <script>
 let list = [
@@ -132,26 +117,81 @@ import Mymess from "~/components/chat/my_message.vue";
 import FooterChat from "~/components/chat/footer_chat.vue";
 export default {
   name: "chat-area",
+  components: {
+    OtherChat,
+    FooterChat,
+    Mymess
+  },
   props: ["user_click"],
   data: function() {
     return {
-      message: []
+      message: [],
+      offsetTop: 0
     };
   },
-  methods: {},
+  mounted: function() {
+    console.log("xxx");
+  },
   watch: {
     user_click(val) {
       if (val.name) {
         var messages = list.filter(user => val.name == user.name);
         this.message = messages[0].m;
-        console.log(messages, messages[0].m);
       }
     }
   },
-  components: {
-    OtherChat,
-    FooterChat,
-    Mymess
+  methods: {
+    updateMessage(obj) {
+      let user = list.filter(user => obj.name == user.name);
+      let msg = { msg: obj.message };
+      user[0].m.push(msg);
+      console.log(msg, typeof user, user[0].m);
+    },
+    dcm(e) {
+      window.scrollTo(
+        0,
+        document.body.scrollHeight || document.documentElement.scrollHeight
+      );
+      console.log(
+        window.scrollTo(
+          0,
+          document.body.scrollHeight || document.documentElement.scrollHeight
+        )
+      );
+    },
+    onScroll(e) {
+      console.log(this.offsetTop , e.target.scrollHeight);
+      this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
+    }
   }
 };
 </script>
+
+<style scoped>
+.header_form_chat {
+  margin-right: 0px;
+  margin-left: 0px;
+  background: #e5e5fe;
+  height: 100px;
+  box-shadow: black;
+}
+.form_chat {
+  margin-right: 0px;
+  margin-left: 0px;
+  background: #ffffff;
+  height: 500px;
+  overflow-y: scroll;
+}
+.footer_chat {
+  margin-right: 0px;
+  margin-left: 0px;
+  background: #e5e5fe;
+  height: 100px;
+  box-shadow: black;
+}
+#nav_dot_active {
+  top: 11px;
+  left: -19px;
+  position: relative;
+}
+</style>
