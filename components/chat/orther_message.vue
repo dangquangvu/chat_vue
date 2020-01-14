@@ -1,16 +1,45 @@
 <template>
-  <li class="clearfix">
-    <div class="message-data align-right">
+  <div class="clearfix">
+    <div class="message-data align-right ">
       <span class="message-data-time">10:14 AM, Today</span> &nbsp; &nbsp;
       <span class="message-data-name">Olia</span>
-      <i class="fa fa-circle me"></i>
+      <font-awesome-icon
+        :icon="['fas', 'circle']"
+        style="color:#94c2ed; font-size:8px ;margin-right: 3px;font-size: 10px"
+        class="me"
+      />
     </div>
     <div class="message other-message float-right">
-      Well I am not sure. 
+      {{chat}}
     </div>
-  </li>
+  </div>
 </template>
 <style scoped lang="scss">
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+  background: #e5e5fe;
+}
+.message-data {
+  margin-bottom: 15px;
+}
+.align-right {
+  text-align: right;
+}
+.message-data-time {
+  color: lighten(#92959e, 8%);
+  padding-left: 6px;
+}
+
+.me {
+  margin-right: 3px;
+  font-size: 10px;
+  color: #94c2ed;
+}
 .message {
   color: white;
   padding: 18px 20px;
@@ -18,7 +47,7 @@
   font-size: 16px;
   border-radius: 7px;
   margin-bottom: 30px;
-  width: 90%;
+  width: 70%;
   position: relative;
 
   &:after {

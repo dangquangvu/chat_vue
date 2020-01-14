@@ -15,11 +15,11 @@
           id="nav_dot_active"
         />
       </v-col>
-      <v-col sm="7" style="margin-left:-25px">
+      <v-col sm="7" style="margin-left:-10px">
         <h5 class="pt-1" style="color: white">{{ name }}</h5>
         <h6 class="p-0" style="color: #9b9b9b">{{ description }}</h6>
       </v-col>
-      <v-col sm="2" class="d-flex justify-center">
+      <v-col sm="1" class="d-flex justify-center" style="margin-left:20px">
         <v-btn icon>
           <font-awesome-icon
             :icon="['fas', 'bell']"

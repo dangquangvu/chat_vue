@@ -24,7 +24,7 @@
             id="nav_dot_active"
           />
         </v-col>
-        <v-col sm="5" style="margin-left:-70px">
+        <v-col sm="5" style="margin-left:-50px">
           <h5 class="pt-1" style="color: red">{{ user_click.name }}</h5>
           <h6 class="p-0" style="color: #9b9b9b">
             {{ user_click.description }}
@@ -34,17 +34,16 @@
     </v-row>
     <v-row style="" class="form_chat">
       <v-card sm="12" pa-0 v-if="user_click.name" style="width:100%">
-        <div v-for="(item, index) in message"
-          :key="index">
-          <OtherChat
-
-          :chat ="item.msg"
-        />
+        <div v-for="(item, index) in message" :key="index">
+          <Mymess v-if="index%2==0" :chat="item.msg" />
+          <OtherChat v-if="index%2!=0" :chat="item.msg" />
         </div>
       </v-card>
     </v-row>
     <v-row style="" class="footer_chat">
-      <v-card sm="12" pa-0 height="100%" width="100%"> </v-card>
+      <v-card sm="12" pa-0 height="100%" width="100%" style="background:#e5e5fe">
+        <FooterChat />
+      </v-card>
     </v-row>
   </v-container>
 </template>
@@ -53,21 +52,21 @@
 .header_form_chat {
   margin-right: 0px;
   margin-left: 0px;
-  background: #ffffff;
+  background: #e5e5fe;
   height: 100px;
   box-shadow: black;
 }
 .form_chat {
   margin-right: 0px;
   margin-left: 0px;
-  background: #e5e5fe;
+  background: #ffffff;
   height: 500px;
   overflow-y: auto;
 }
 .footer_chat {
   margin-right: 0px;
   margin-left: 0px;
-  background: #ffffff;
+  background: #e5e5fe;
   height: 100px;
   box-shadow: black;
 }
@@ -129,6 +128,8 @@ let list = [
   }
 ];
 import OtherChat from "~/components/chat/orther_message.vue";
+import Mymess from "~/components/chat/my_message.vue";
+import FooterChat from "~/components/chat/footer_chat.vue";
 export default {
   name: "chat-area",
   props: ["user_click"],
@@ -148,7 +149,9 @@ export default {
     }
   },
   components: {
-    OtherChat
+    OtherChat,
+    FooterChat,
+    Mymess
   }
 };
 </script>
