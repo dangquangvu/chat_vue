@@ -32,12 +32,13 @@
         </v-col>
       </v-card>
     </v-row>
-    <v-row style="" v-on:scroll="onScroll" class="form_chat " id="scroll-target">
+    <v-row style=""  class="form_chat "  id="scroll-target">
       <v-card
         sm="12"
         pa-0
         v-if="user_click.name"
         style="width:100%"
+
       >
         <div v-for="(item, index) in message" :key="index">
           <Mymess v-if="index % 2 == 0" :chat="item.msg" />
@@ -79,28 +80,6 @@ let list = [
       { msg: "1" },
       { msg: "1" },
       { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" }
     ]
   },
   {
@@ -137,32 +116,28 @@ export default {
       if (val.name) {
         var messages = list.filter(user => val.name == user.name);
         this.message = messages[0].m;
+        this.scrollToEnd()
       }
     }
   },
+   updated() {
+        // whenever data changes and the component re-renders, this is called.
+        this.$nextTick(() => this.scrollToEnd());
+    },
   methods: {
     updateMessage(obj) {
       let user = list.filter(user => obj.name == user.name);
       let msg = { msg: obj.message };
       user[0].m.push(msg);
-      console.log(msg, typeof user, user[0].m);
+      this.scrollToEnd();
     },
-    dcm(e) {
-      window.scrollTo(
-        0,
-        document.body.scrollHeight || document.documentElement.scrollHeight
-      );
-      console.log(
-        window.scrollTo(
-          0,
-          document.body.scrollHeight || document.documentElement.scrollHeight
-        )
-      );
+    scrollToEnd: function() {
+      var container = this.$el.querySelector("#scroll-target");
+      let y = container.scrollHeight;
+      container.scrollTop =  container.scrollHeight ;
+      console.log(container.scrollHeight, container.scrollTop)
+      console.log(this.$root)
     },
-    onScroll(e) {
-      console.log(this.offsetTop , e.target.scrollHeight);
-      this.offsetTop = window.pageYOffset || document.documentElement.scrollTop;
-    }
   }
 };
 </script>
@@ -180,7 +155,7 @@ export default {
   margin-left: 0px;
   background: #ffffff;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .footer_chat {
   margin-right: 0px;

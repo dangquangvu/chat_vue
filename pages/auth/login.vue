@@ -1,18 +1,18 @@
 <template>
   <v-container>
     <v-layout row>
-      <v-flex xs3 sm3 offset-sm3>
+      <v-flex xs4 sm4 offset-sm3>
         <v-card>
           <v-card-text>
             <v-container>
-              <form @submit.prevent="onSignup">
+              <form>
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
                       name="email"
                       label="Mail"
                       id="email"
-                      v-model="email"
+                      v-model.trim="email"
                       type="email"
                       required
                     ></v-text-field>
@@ -24,15 +24,18 @@
                       name="password"
                       label="Password"
                       id="password"
-                      v-model="password"
+                      v-model.trim="password"
                       type="password"
                       required
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
+                <v-alert ref="alert" v-if="alert">{{ alert }}</v-alert>
                 <v-layout row>
                   <v-flex sm5 class="text-end d-flex flex-row-reverse">
-                    <v-btn type="submit">Log In</v-btn>
+                    <v-btn type="submit" @click.prevent="onSignup"
+                      >Submit</v-btn
+                    >
                   </v-flex>
                   <v-spacer></v-spacer>
                   <v-flex sm5 class="text-end d-flex ">
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -58,6 +62,7 @@ export default {
       password: "",
       confirmPassword: "",
       fullName: "",
+      alert: "",
       register: {
         icon: "mdi-apps",
         title: "Sign In",
@@ -71,21 +76,59 @@ export default {
         ? "Passwords do not match"
         : "";
     }
-    //   user () {
-    //     return this.$store.getters.user
-    //   }
-    // },
-    // watch: {
-    //   user (value) {
-    //     if (value !== null && value !== undefined) {
-    //       this.$router.push('/')
-    //     }
-    //   }
-    // },
-    // methods: {
-    //   onSignup () {
-    //     this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
-    //   }
+  },
+  watch: {
+    alert() {
+      return alert;
+    }
+  },
+  methods: {
+    async onSignup() {
+      console.log(this.email, this.password);
+      let param = {
+        email: this.email,
+        password: this.password
+      };
+      try {
+        axios
+          .post("http://localhost:3335/admin/", param)
+          .then(data => {
+            console.log(data.data.accessToken);
+            console.log(this.$refs.alert)
+            // this.$refs.alert.
+            this.alert = data.status;
+            // redirects()
+          })
+          .catch(err => {
+            if(err.response.data.message){
+              this.alert = err.response.data.message;
+              //  this.$refs.alert.
+            }else {
+              this.alert ='error!'
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+
+      // if(!user)
+    }
   }
+  //   user () {
+  //     return this.$store.getters.user
+  //   }
+  // },
+  // watch: {
+  //   user (value) {
+  //     if (value !== null && value !== undefined) {
+  //       this.$router.push('/')
+  //     }
+  //   }
 };
 </script>
+
+<style scoped>
+.alert_danger {
+  color: red;
+}
+</style>

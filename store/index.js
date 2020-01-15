@@ -1,18 +1,21 @@
 export const state = () => ({
-    list: []
+    token: ""
 });
 
 export const mutations = {
-    add(state, text) {
-        state.list.push({
-            text,
-            done: false
-        });
+    getState(stage, newToken) {
+        stage.token = newToken;
+    },
+    addToken(state, token) {
+        localStorage.setItem(token, state.token);
     },
     remove(state, { todo }) {
         state.list.splice(state.list.indexOf(todo), 1);
-    },
-    toggle(state, todo) {
-        todo.done = !todo.done;
+    }
+};
+
+export const actions = {
+    getToken() {
+        localStorage.setItem("");
     }
 };

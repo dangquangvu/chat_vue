@@ -62,8 +62,16 @@ module.exports = {
                     }
                 ]
             }
-        ]
+        ],
+        "@nuxtjs/axios"
     ],
+    axios: {
+        baseURL: "http://localhost:3335/",
+        redirectError: {
+            401: "/login",
+            404: "/"
+        }
+    },
     fontawesome: {
         imports: [{
                 set: "@fortawesome/free-solid-svg-icons", // Solid icons
