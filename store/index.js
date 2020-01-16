@@ -1,21 +1,37 @@
+import axios from "axios";
 export const state = () => ({
-    token: ""
+    token: null,
+    user: {}
 });
 
 export const mutations = {
-    getState(stage, newToken) {
+    setToken(stage, newToken) {
         stage.token = newToken;
     },
-    addToken(state, token) {
-        localStorage.setItem(token, state.token);
+    addTokenLocalStorage(state, token) {
+        localStorage.setItem("accessToken", state.token);
     },
-    remove(state, { todo }) {
-        state.list.splice(state.list.indexOf(todo), 1);
+    removeTokenLocalStorage() {
+        localStorage.removeItem("accessToken");
+    },
+    setUser(state, user) {
+        state.user = user;
+    },
+    reset: state => {
+        state.token = null;
+        state.user = {};
     }
 };
 
 export const actions = {
-    getToken() {
-        localStorage.setItem("");
+    login({ commit, dispatch }, { token, user }) {
+        commit("setToken", token);
+        commit("setUser", user);
+        commit("addTokenLocalStorage", token);
+        axios.defaults.headers.common["Authorization"] = token;
+    },
+    logout({ commit }) {
+        commit("reset", "");
+        commit("removeTokenLocalStorage");
     }
 };

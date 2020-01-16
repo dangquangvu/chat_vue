@@ -55,6 +55,7 @@
 
 <script>
 import axios from "axios";
+import { nextTick } from "q";
 export default {
   data() {
     return {
@@ -70,18 +71,12 @@ export default {
       }
     };
   },
-  computed: {
-    comparePasswords() {
-      return this.password !== this.confirmPassword
-        ? "Passwords do not match"
-        : "";
-    }
-  },
   watch: {
     alert() {
       return alert;
     }
   },
+  middleware: "notAuthenticated",
   methods: {
     async onSignup() {
       console.log(this.email, this.password);
@@ -93,37 +88,46 @@ export default {
         axios
           .post("http://localhost:3335/admin/", param)
           .then(data => {
-            console.log(data.data.accessToken);
-            console.log(this.$refs.alert)
-            // this.$refs.alert.
+            let token = data.data.accessToken;
+            let user = data.data.user;
             this.alert = data.status;
-            // redirects()
+            // console.log(data.data.accessToken, data.data,user._id);
+            this.$store.commit("setToken", data.data.accessToken);
+            // console.log("actions", this.$store.state.token);
+            this.$store.dispatch("login", { token, user });
+            this.$router.push("/chat");
           })
           .catch(err => {
-            if(err.response.data.message){
-              this.alert = err.response.data.message;
-              //  this.$refs.alert.
-            }else {
-              this.alert ='error!'
+            if (err) {
+              if (err.response.data.message) {
+                this.alert = err.response.data.message;
+              } else {
+                this.alert = "error!";
+              }
             }
           });
       } catch (error) {
         console.log(error);
       }
-
-      // if(!user)
     }
+  },
+  created: async function() {
+    let token = localStorage.getItem("accessToken");
+    let data = await axios
+      .post("http://localhost:3335/admin/verifyToken", {
+        token: token
+      })
+      .then(data => {
+        console.log(data.status, data.data.user);
+        console.log("before create");
+        let _user = data.data.user;
+        this.$store.commit("setToken", token);
+        this.$store.commit("setUser", _user);
+        this.$router.push("/chat");
+      }).catch(e=>{
+        console.log(e)
+      })
   }
-  //   user () {
-  //     return this.$store.getters.user
-  //   }
-  // },
-  // watch: {
-  //   user (value) {
-  //     if (value !== null && value !== undefined) {
-  //       this.$router.push('/')
-  //     }
-  //   }
 };
 </script>
 

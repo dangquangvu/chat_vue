@@ -135,8 +135,6 @@ export default {
       var container = this.$el.querySelector("#scroll-target");
       let y = container.scrollHeight;
       container.scrollTop =  container.scrollHeight ;
-      console.log(container.scrollHeight, container.scrollTop)
-      console.log(this.$root)
     },
   }
 };

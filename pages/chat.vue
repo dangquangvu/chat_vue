@@ -39,14 +39,21 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col sm1 class="" style="text-align: end;">
-        <nuxt-link :to="login.to"
+        <nuxt-link :to="login.to" class="mr-2"
           ><font-awesome-icon
             :icon="['fas', 'sign-in-alt']"
             style="color:red; font-size:30px; "
-            class=" mb-5"
+            class=" "
+            id="nav_dot_active"/></nuxt-link
+        ><v-btn @click="logOut()"
+          ><font-awesome-icon
+            :icon="['fas', 'sign-out-alt']"
+            style="color:red; font-size:30px; "
+            class=""
             id="nav_dot_active"
-        /></nuxt-link>
+        /></v-btn>
       </v-col>
+
       <!-- </v-row>
       </v-container> -->
     </v-app-bar>
@@ -103,9 +110,12 @@ export default {
       drawer: false,
       fixed: false,
       login: {
-        icon: "mdi-apps",
         title: "Sign In",
         to: "/auth/register"
+      },
+      logout: {
+        title: "login",
+        to: "/auth/login"
       },
       items: [
         {
@@ -122,9 +132,11 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Vuetify.js"
+      title: "Vuetify.js",
+      token : ''
     };
   },
+  middleware: "authenticated",
   methods: {
     updateScore(newMsg) {
       //this.msg = newMsg;
@@ -135,6 +147,11 @@ export default {
     },
     userClick(friend) {
       this.friend_click = friend;
+    },
+    logOut() {
+      console.log("logout");
+      this.$store.dispatch("logout");
+      this.$router.push("/auth/login");
     }
   }
 };

@@ -132,5 +132,16 @@ module.exports = {
          */
         extend(config, ctx) {},
         transpile: ["mdbvue/lib/components"]
-    }
+    },
+    serverMiddleware: [
+        // body-parser middleware
+        bodyParser.json(),
+        // session middleware
+        session({
+            secret: "super-secret-key",
+            resave: false,
+            saveUninitialized: false,
+            cookie: { maxAge: 60000 }
+        })
+    ]
 };
