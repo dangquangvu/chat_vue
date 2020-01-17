@@ -111,23 +111,6 @@ export default {
       }
     }
   },
-  created: async function() {
-    let token = localStorage.getItem("accessToken");
-    let data = await axios
-      .post("http://localhost:3335/admin/verifyToken", {
-        token: token
-      })
-      .then(data => {
-        console.log(data.status, data.data.user);
-        console.log("before create");
-        let _user = data.data.user;
-        this.$store.commit("setToken", token);
-        this.$store.commit("setUser", _user);
-        this.$router.push("/chat");
-      }).catch(e=>{
-        console.log(e)
-      })
-  }
 };
 </script>
 

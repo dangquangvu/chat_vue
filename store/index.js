@@ -1,4 +1,6 @@
 import axios from "axios";
+import createPersistedState from "vuex-persistedstate";
+
 export const state = () => ({
     token: null,
     user: {}
@@ -10,6 +12,7 @@ export const mutations = {
     },
     addTokenLocalStorage(state, token) {
         localStorage.setItem("accessToken", state.token);
+        axios.defaults.headers.common["Authorization"] = token;
     },
     removeTokenLocalStorage() {
         localStorage.removeItem("accessToken");
@@ -28,10 +31,12 @@ export const actions = {
         commit("setToken", token);
         commit("setUser", user);
         commit("addTokenLocalStorage", token);
-        axios.defaults.headers.common["Authorization"] = token;
     },
     logout({ commit }) {
         commit("reset", "");
         commit("removeTokenLocalStorage");
+        delete axios.defaults.headers.common["Authorization"];
     }
 };
+
+export const plugins = [createPersistedState()];

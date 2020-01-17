@@ -95,6 +95,13 @@ import ChatArea from "~/components/ChatArea.vue";
 import NavChat from "~/components/NavChat.vue";
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 import { mdbCard, mdbBtn, mdbIcon } from "mdbvue";
+import io from "socket.io-client";
+// var connectionOptions = {
+//   "force new connection": true,
+//   reconnectionAttempts: "Infinity", //avoid having user reconnect manually in order to prevent dead clients after a server restart
+//   timeout: 10000, //before connect_error and connect_timeout are emitted.
+//   transports: ["*"]
+// };
 export default {
   components: {
     ChatArea,
@@ -133,7 +140,8 @@ export default {
       right: true,
       rightDrawer: false,
       title: "Vuetify.js",
-      token : ''
+      token: "",
+      socket: io("http://localhost:3335")
     };
   },
   middleware: "authenticated",

@@ -6,7 +6,7 @@
           <v-card>
             <v-card-text>
               <v-container>
-                <form @submit.prevent="onSignup">
+                <form>
                   <v-layout row>
                     <v-flex xs12>
                       <v-text-field
@@ -43,23 +43,15 @@
                       ></v-text-field>
                     </v-flex>
                   </v-layout>
-                  <v-layout row>
-                    <v-flex xs12>
-                      <v-text-field
-                        name="confirmPassword"
-                        label="Confirm Password"
-                        id="confirmPassword"
-                        v-model="confirmPassword"
-                        type="password"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
+                  <v-alert ref="alert" v-if="alert">{{ alert }}</v-alert>
                   <v-layout row>
                     <v-flex sm5 class="text-end d-flex flex-row-reverse">
-                      <v-btn type="submit">Sign up</v-btn>
+                      <v-btn type="submit" @click.prevent="onSignup"
+                        >Sign up</v-btn
+                      >
                     </v-flex>
                     <v-spacer></v-spacer>
-                    <v-flex sm5  class="text-end d-flex ">
+                    <v-flex sm5 class="text-end d-flex ">
                       <v-btn :to="login.to">
                         login
                       </v-btn>
@@ -76,41 +68,52 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       email: "",
       password: "",
-      confirmPassword: "",
       fullName: "",
       login: {
         icon: "mdi-apps",
         title: "login In",
         to: "/auth/login"
-      }
+      },
+      alert: ""
     };
   },
-  computed: {
-    comparePasswords() {
-      return this.password !== this.confirmPassword
-        ? "Passwords do not match"
-        : "";
+  computed: {},
+
+  methods: {
+    onSignup() {
+      let param = {
+        email: this.email,
+        password: this.password,
+        fullname: this.fullName
+      };
+      try {
+        axios
+          .post("http://localhost:3335/admin/signIn", param)
+          .then(data => {
+            let token = data.data.accessToken;
+            let user = data.data.user;
+            this.alert = data.status;
+            this.$router.push("/auth/login");
+          })
+          .catch(err => {
+            if (err) {
+              if (err.response.data.message) {
+                this.alert = err.response.data.message;
+              } else {
+                this.alert = "error!";
+              }
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
-    //   user () {
-    //     return this.$store.getters.user
-    //   }
-    // },
-    // watch: {
-    //   user (value) {
-    //     if (value !== null && value !== undefined) {
-    //       this.$router.push('/')
-    //     }
-    //   }
-    // },
-    // methods: {
-    //   onSignup () {
-    //     this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
-    //   }
   }
 };
 </script>

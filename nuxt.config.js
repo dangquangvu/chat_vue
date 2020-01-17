@@ -40,7 +40,7 @@ module.exports = {
     /*
      ** Plugins to load before mounting the App
      */
-    plugins: [],
+    plugins: [{ src: "~/plugins/localStorage.js", ssr: false }],
     /*
      ** Nuxt.js dev-modules
      */
@@ -132,16 +132,16 @@ module.exports = {
          */
         extend(config, ctx) {},
         transpile: ["mdbvue/lib/components"]
-    },
-    serverMiddleware: [
-        // body-parser middleware
-        bodyParser.json(),
-        // session middleware
-        session({
-            secret: "super-secret-key",
-            resave: false,
-            saveUninitialized: false,
-            cookie: { maxAge: 60000 }
-        })
-    ]
+    }
+    // serverMiddleware: [
+    //     // body-parser middleware
+    //      bodyParser.json(),
+    //     // session middleware
+    //     session({
+    //         secret: "super-secret-key",
+    //         resave: false,
+    //         saveUninitialized: false,
+    //         cookie: { maxAge: 60000 }
+    //     })
+    // ]
 };
