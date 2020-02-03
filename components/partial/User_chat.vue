@@ -16,8 +16,8 @@
         />
       </v-col>
       <v-col sm="7" style="margin-left:-10px">
-        <h5 class="pt-1" style="color: white">{{ name }}</h5>
-        <h6 class="p-0" style="color: #9b9b9b">{{ description }}</h6>
+        <h5 class="pt-1" style="color: white">{{ user.fullname }}</h5>
+        <h6 class="p-0" style="color: #9b9b9b">{{ user.email }}</h6>
       </v-col>
       <v-col sm="1" class="d-flex justify-center" style="margin-left:20px">
         <v-btn icon>
@@ -67,7 +67,10 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row class=" d-flex justify-center" style="margin-top:-30px; margin-bottom:-20px">
+    <v-row
+      class=" d-flex justify-center"
+      style="margin-top:-30px; margin-bottom:-20px"
+    >
       <v-col sm="10">
         <v-row>
           <v-col sm="12" class="py-0 px-0">
@@ -99,8 +102,7 @@ import "@mdi/font/css/materialdesignicons.css";
 export default {
   data() {
     return {
-      name: "Dang Quang Vu",
-      description: "description"
+      me: null
     };
   },
   icons: {
@@ -114,6 +116,12 @@ export default {
     mdbCard,
     mdbBtn,
     mdbIcon
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+    
   }
 };
 </script>

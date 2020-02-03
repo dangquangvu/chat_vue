@@ -93,15 +93,9 @@
 <script>
 import ChatArea from "~/components/ChatArea.vue";
 import NavChat from "~/components/NavChat.vue";
-// import "@fortawesome/fontawesome-free/css/all.min.css";
 import { mdbCard, mdbBtn, mdbIcon } from "mdbvue";
 import io from "socket.io-client";
-// var connectionOptions = {
-//   "force new connection": true,
-//   reconnectionAttempts: "Infinity", //avoid having user reconnect manually in order to prevent dead clients after a server restart
-//   timeout: 10000, //before connect_error and connect_timeout are emitted.
-//   transports: ["*"]
-// };
+import socket from '~/plugins/socket.js'
 export default {
   components: {
     ChatArea,
@@ -141,20 +135,24 @@ export default {
       rightDrawer: false,
       title: "Vuetify.js",
       token: "",
-      socket: io("http://localhost:3335")
+      socket: io("http://localhost:3335"),
+      me : null,
+      friends : []
     };
   },
+  created(){
+    this.me = this.$store.user;
+  }
+  ,
   middleware: "authenticated",
   methods: {
     updateScore(newMsg) {
       //this.msg = newMsg;
       //:msg="msg" @updateScore="updateScore"
     },
-    reRender() {
-      this.$forceUpdate();
-    },
     userClick(friend) {
       this.friend_click = friend;
+      console.log(this.friend_click.fullname)
     },
     logOut() {
       console.log("logout");

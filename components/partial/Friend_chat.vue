@@ -1,5 +1,8 @@
 <template>
-  <v-container class="p-0 m-0">
+  <v-container
+    class="p-0 m-0"
+    v-if="this.friend.email != this.$store.state.user.email"
+  >
     <v-row class=" d-flex justify-center m-0">
       <v-col sm="1" class="p-0"> </v-col>
       <v-col sm="2" class="p-1 " height="50%">
@@ -18,14 +21,16 @@
       </v-col>
       <v-col sm="6" class="p-0 mt-2 ">
         <span class="">
-          <h5 style="color:white" class="ml-3">{{ friend.name }}</h5>
+          <h5 style="color:white" class="ml-3">{{ friend.fullname }}</h5>
           <!-- <h6
             style="font-size:12px;margin-top:8px;font-style: italic; margin-left:15px;color: rgb(155, 155, 155);"
           >
             {{ time_online }}
           </h6> -->
         </span>
-        <h6 style="color: rgb(155, 155, 155);margin-top:-7px" class="ml-3">{{ friend.description }}</h6>
+        <h6 style="color: rgb(155, 155, 155);margin-top:-7px" class="ml-3">
+          {{ friend.email }}
+        </h6>
       </v-col>
       <v-col sm="3" class="p-0"> </v-col>
     </v-row>

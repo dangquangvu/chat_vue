@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="d-flex mb-0">
-      <UserChat v:bind:me />
+      <UserChat v:bind:i />
     </v-row>
     <v-row sm12 style="max-height:450px;overflow-y: auto;">
       <FriendChat
@@ -24,35 +24,31 @@
 <script>
 import UserChat from "~/components/partial/User_chat.vue";
 import FriendChat from "~/components/partial/Friend_chat.vue";
+import axios from "axios";
 
 export default {
-  props: {},
   data() {
     return {
-      me: {
-        name: "Dang Quang Vu",
-        description: "description"
-      },
-      friends: [
-        {
-          id: 1,
-          name: "user1",
-          description: "description"
-        },
-        {
-          id: 2,
-          name: "user2",
-          description: "description"
-        },
-        {
-          id: 3,
-          name: "user3",
-          description: "description"
-        }
-      ]
+      me: null,
+      friends: []
     };
   },
-  computed: {},
+  async created() {
+    let me = this.$store.state.user;
+    let friends = [];
+    await axios.get("http://localhost:3335/admin/friends").then(data => {
+      console.log(data.data.data);
+      this.friends = data.data.data;
+      console.log(this.friends,'friend');
+      return;
+    });
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
+  },
+
   components: {
     UserChat,
     FriendChat

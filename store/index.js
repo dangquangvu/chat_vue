@@ -1,6 +1,6 @@
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
-
+import socket from "~/plugins/socket.js";
 export const state = () => ({
     token: null,
     user: {}
@@ -12,7 +12,7 @@ export const mutations = {
     },
     addTokenLocalStorage(state, token) {
         localStorage.setItem("accessToken", state.token);
-        axios.defaults.headers.common["Authorization"] = token;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
     removeTokenLocalStorage() {
         localStorage.removeItem("accessToken");
@@ -39,7 +39,14 @@ export const actions = {
     },
     SOCKET_mesage(data) {
         console.log("message", data);
+    },
+    getFriend(data) {
+        let friends = [];
+        axios.get("http://localhost:3335/admin/friends").then(data => {
+            console.log(data, 111);
+            return;
+        });
     }
 };
 
-export const plugins = [createPersistedState()];
+// export const plugins = [createPersistedState()];

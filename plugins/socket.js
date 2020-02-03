@@ -1,17 +1,5 @@
-import Vue from "vue";
-// import store from "./store";
-import VueSocketIO from "vue-socket.io";
+import io from "socket.io-client";
 
-export default function({ store }) {
-    Vue.use(
-        new VueSocketIO({
-            debug: false,
-            connection: "http://localhost:3000",
-            vuex: {
-                store,
-                actionPrefix: "SOCKET_",
-                mutationPrefix: "SOCKET_"
-            }
-        })
-    );
-}
+const socket = io(process.env.SOCKET_HOST_URL);
+
+export default socket;
