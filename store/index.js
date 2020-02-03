@@ -36,6 +36,9 @@ export const actions = {
         commit("reset", "");
         commit("removeTokenLocalStorage");
         delete axios.defaults.headers.common["Authorization"];
+    },
+    SOCKET_mesage(data) {
+        console.log("message", data);
     }
 };
 

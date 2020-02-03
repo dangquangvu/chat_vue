@@ -40,7 +40,10 @@ module.exports = {
     /*
      ** Plugins to load before mounting the App
      */
-    plugins: [{ src: "~/plugins/localStorage.js", ssr: false }],
+    plugins: [
+        { src: "~/plugins/localStorage.js", ssr: false },
+        { src: "~/plugins/socket.js", ssr: false }
+    ],
     /*
      ** Nuxt.js dev-modules
      */
@@ -131,7 +134,8 @@ module.exports = {
          ** You can extend webpack config here
          */
         extend(config, ctx) {},
-        transpile: ["mdbvue/lib/components"]
+        transpile: ["mdbvue/lib/components"],
+        vendor: ["socket.io-client"]
     }
     // serverMiddleware: [
     //     // body-parser middleware
