@@ -3,10 +3,28 @@ import createPersistedState from "vuex-persistedstate";
 import socket from "~/plugins/socket.js";
 export const state = () => ({
     token: null,
-    user: {}
+    user: {},
+    conversation: {},
+    currentConversationId: null,
+    recipientUserID: null,
+    fetched: null
 });
 
+export const getters = {
+    currentConversation(state) {
+        return state.currentConversationId ?
+            state.conversations[state.currentConversationId] :
+            null;
+    },
+    recipientUser(state) {
+        return state.users ? state.users[state.recipientUserID] : null;
+    }
+};
+
 export const mutations = {
+    SET_FETCHED(state) {
+        state.fetched = true;
+    },
     setToken(stage, newToken) {
         stage.token = newToken;
     },

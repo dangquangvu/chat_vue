@@ -32,14 +32,8 @@
         </v-col>
       </v-card>
     </v-row>
-    <v-row style=""  class="form_chat "  id="scroll-target">
-      <v-card
-        sm="12"
-        pa-0
-        v-if="user_click.name"
-        style="width:100%"
-
-      >
+    <v-row style="" class="form_chat " id="scroll-target">
+      <v-card sm="12" pa-0 v-if="user_click.name" style="width:100%">
         <div v-for="(item, index) in message" :key="index">
           <Mymess v-if="index % 2 == 0" :chat="item.msg" />
           <OtherChat v-if="index % 2 != 0" :chat="item.msg" />
@@ -73,13 +67,7 @@ let list = [
       { msg: "1" },
       { msg: "1" },
       { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
+      { msg: "1" }
     ]
   },
   {
@@ -94,6 +82,7 @@ let list = [
 import OtherChat from "~/components/chat/orther_message.vue";
 import Mymess from "~/components/chat/my_message.vue";
 import FooterChat from "~/components/chat/footer_chat.vue";
+import socket from "~/plugins/socket.js";
 export default {
   name: "chat-area",
   components: {
@@ -108,6 +97,10 @@ export default {
       offsetTop: 0
     };
   },
+  beforeMount() {
+    console.log(this.$store.state.user._id)
+    socket.emit("online-ping", this.$store.state.user._id);
+  },
   mounted: function() {
     console.log("xxx");
   },
@@ -116,14 +109,14 @@ export default {
       if (val.name) {
         var messages = list.filter(user => val.name == user.name);
         this.message = messages[0].m;
-        this.scrollToEnd()
+        this.scrollToEnd();
       }
     }
   },
-   updated() {
-        // whenever data changes and the component re-renders, this is called.
-        this.$nextTick(() => this.scrollToEnd());
-    },
+  updated() {
+    // whenever data changes and the component re-renders, this is called.
+    this.$nextTick(() => this.scrollToEnd());
+  },
   methods: {
     updateMessage(obj) {
       let user = list.filter(user => obj.name == user.name);
@@ -134,8 +127,8 @@ export default {
     scrollToEnd: function() {
       var container = this.$el.querySelector("#scroll-target");
       let y = container.scrollHeight;
-      container.scrollTop =  container.scrollHeight ;
-    },
+      container.scrollTop = container.scrollHeight;
+    }
   }
 };
 </script>

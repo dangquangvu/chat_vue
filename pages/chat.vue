@@ -156,6 +156,7 @@ export default {
     },
     logOut() {
       console.log("logout");
+      socket.emit("disconnect");
       this.$store.dispatch("logout");
       this.$router.push("/auth/login");
     }

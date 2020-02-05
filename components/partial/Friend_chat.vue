@@ -5,7 +5,7 @@
   >
     <v-row class=" d-flex justify-center m-0">
       <v-col sm="1" class="p-0"> </v-col>
-      <v-col sm="2" class="p-1 " height="50%">
+      <v-col sm="2" class="p-1 " height="50%" v-if="online">
         <img
           src="@/assets/user1.png"
           alt="user img"
@@ -14,8 +14,22 @@
         />
         <font-awesome-icon
           :icon="['fas', 'circle']"
-          style="color:#02fd02; font-size:8px"
-          class="mt-2"
+          class="mt-2 "
+          v-bind:class="{ active_user }"
+          id="nav_dot_active"
+        />
+      </v-col>
+      <v-col sm="2" class="p-1 " height="50%" v-if="!online">
+        <img
+          src="@/assets/user1.png"
+          alt="user img"
+          style="width:50px ;border-radius: 50%;position:relative"
+          id="nav_img_user"
+        />
+        <font-awesome-icon
+          :icon="['fas', 'circle']"
+          class="mt-2 "
+          v-bind:class="{ disactive_user }"
           id="nav_dot_active"
         />
       </v-col>
@@ -42,16 +56,35 @@
   left: 32px;
   position: relative;
 }
+.active_user {
+  color: #02fd02;
+  font-size: 8px;
+}
+.disactive_user {
+  color: #dd691c;
+  font-size: 8px;
+}
 </style>
 <script>
 export default {
   props: ["friend"],
   data() {
     return {
-      name: "user1",
-      msg: "aaaaaaa",
-      time_online: "5phut"
+      online: false,
+      active_user: {
+        color: "#02fd02",
+        fontSize: "8px"
+      },
+      disactive_user: {
+        color: "#dd691c",
+        fontSize: "8px"
+      }
     };
+  },
+  watch: {
+    online(){
+      return this.online;
+    }
   }
 };
 </script>

@@ -37,7 +37,6 @@ export default {
     let me = this.$store.state.user;
     let friends = [];
     await axios.get("http://localhost:3335/admin/friends").then(data => {
-      console.log(data.data.data);
       this.friends = data.data.data;
       console.log(this.friends,'friend');
       return;
