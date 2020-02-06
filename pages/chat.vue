@@ -98,6 +98,7 @@ import { mdbCard, mdbBtn, mdbIcon } from "mdbvue";
 import io from "socket.io-client";
 import socket from "~/plugins/socket.js";
 import axios from "axios";
+import { mapState, mapGetters } from "vuex";
 export default {
   components: {
     ChatArea,
@@ -141,60 +142,62 @@ export default {
       me: null,
       friends: [],
       messages: [],
-      conversationID: null,
-      formObj :{
-        conversationId : null,
-        mess :[]
-      }
+      conversationID: null
     };
   },
   created() {
     this.me = this.$store.user;
   },
   middleware: "authenticated",
+  computed: {
+    ...mapState(["messages"])
+  },
   methods: {
-    updateScore(newMsg) {
-      //this.msg = newMsg;
-      //:msg="msg" @updateScore="updateScore"
-    },
     async userClick(friend) {
       this.friend_click = friend;
-      console.log(this.friend_click);
       let i = this.$store.state.user;
-      let conversationId = await axios.get(
-        "http://localhost:3335/admin/conversation",
+      let dataId = await axios.post(
+        "http://localhost:3335/admin/conversationId",
         {
           nameConversation: friend.fullname
         }
       );
+      let conversationId = dataId.data.conversationID;
+      // console.log(conversationId);
       let mess = this.$store.state.messages;
       let counter = 0;
-      console.log(mess)
-      if (mess) {
-        for (let i = 0; i < mess.length; i++) {
-          if (mess[i].conversationId == conversationId) {
-            this.messages = mess[i];
-            this.conversationID = conversationId;
-            return;
-          }
+      // console.log(mess.__ob__.value, 'out');
+
+      for (let i = 0; i < mess.length; i++) {
+        if (mess[i].conversationId == conversationId) {
+          this.messages = mess[i].mess;
+          this.conversationID = conversationId;
+          counter = 1;
+          console.log(mess[i].conversationId, i, conversationId);
+          return;
         }
       }
-
+      if (counter == 0) {
         let data = await axios
           .post("http://localhost:3335/admin/get_message", {
             conversationId: conversationId
           })
           .then(dt => {
+            let formObj = {
+              conversationId: null,
+              mess: []
+            };
             this.messages = dt.data.message;
-            this.conversationID = dt.data.conversationID._id;
+            this.conversationID = dt.data.conversationID;
+            console.log('call server');
             this.$store.commit("setTicked", friend._id);
-            this.formObj.conversationId = this.conversationID;
-            this.formObj.mess = this.messages;
-            this.$store.commit("pushMess", this.formObj);
-            console.log( this.formObj);
-          })
-          .catch(err => {});
-      
+            formObj.conversationId = this.conversationID;
+            formObj.mess = this.messages;
+            this.$store.commit("pushMess", formObj);
+            // console.log(formObj);
+          });
+      }
+      //   .catch(err => {});
     },
     logOut() {
       console.log("logout");

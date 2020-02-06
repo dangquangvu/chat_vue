@@ -98,8 +98,6 @@ export default {
   },
   watch: {
     user_click(val) {
-
-      console.log(val);
       this.user_click = val;
     }
   },

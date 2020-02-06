@@ -15,7 +15,6 @@
         :class="{ friend_clicked: friend._id == ticked }"
       />
       <!-- :class="{ 'friend_clicked':  true }" -->
-      <!-- <div>{{check}}</div> -->
       <!-- <div>{{conversationId}}</div> -->
       <!-- <FriendChat
           v-if="conversationId != this.$store.state.ticked"
@@ -51,8 +50,7 @@ export default {
       friend_chat: {
         background: "#21193f",
         cursor: "pointer"
-      },
-      check: false
+      }
     };
   },
   async created() {
@@ -70,9 +68,6 @@ export default {
     },
     ticked() {
       return this.$store.state.ticked;
-    },
-    check(){
-      this.check =1
     }
   },
 
