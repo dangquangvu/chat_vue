@@ -1,14 +1,15 @@
 <template>
   <v-container class="p-0">
     <v-row style="" class="header_form_chat" flat outlined>
-      <v-card v-if="!user_click.id"></v-card>
+      <v-card v-if="!user_click._id"></v-card>
       <v-card
-        v-if="user_click.id"
+        v-if="user_click._id"
         class="d-inline-flex"
         sm="12"
         pa-0
         height="100%"
         width="100%"
+        style="background:#e5e5fe"
       >
         <v-col v-if="user_click" sm="2">
           <img
@@ -24,20 +25,26 @@
             id="nav_dot_active"
           />
         </v-col>
-        <v-col sm="5" style="margin-left:-50px">
-          <h5 class="pt-1" style="color: red">{{ user_click.name }}</h5>
+        <v-col sm="5" style="margin-left:-40px;background:#e5e5fe">
+          <h5 class="pt-1" style="color: red">{{ user_click.fullname }}</h5>
           <h6 class="p-0" style="color: #9b9b9b">
-            {{ user_click.description }}
+            {{ user_click.email }}
           </h6>
         </v-col>
       </v-card>
     </v-row>
-    <v-row style="" class="form_chat " id="scroll-target">
-      <v-card sm="12" pa-0 v-if="user_click.name" style="width:100%">
-        <div v-for="(item, index) in message" :key="index">
-          <Mymess v-if="index % 2 == 0" :chat="item.msg" />
-          <OtherChat v-if="index % 2 != 0" :chat="item.msg" />
+    <v-row style="background:#B8D7D5" class="form_chat" id="scroll-target">
+      <v-card
+        sm="12"
+        pa-0
+        v-if="user_click.fullname"
+        style="width:100%;background:#B8D7D5"
+      >
+        <div v-for="(item, index) in mess" :key="index">
+          <Mymess v-if="item.author == user_click._id" :chat="item.body" :name="item.nameAuthor" />
+          <OtherChat v-else :chat="item.body" :name="item.nameAuthor" />
         </div>
+        <!-- <div>{{mess}}</div> -->
       </v-card>
     </v-row>
     <v-row style="" class="footer_chat">
@@ -60,23 +67,8 @@
 <script>
 let list = [
   {
-    name: "user1",
-    m: [
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" },
-      { msg: "1" }
-    ]
-  },
-  {
-    name: "user2",
-    m: [{ msg: "2" }, { msg: "2" }, { msg: "2" }, { msg: "2" }]
-  },
-  {
-    name: "user3",
-    m: [{ msg: "3" }, { msg: "3" }, { msg: "3" }, { msg: "3" }]
+    name: {},
+    message: null
   }
 ];
 import OtherChat from "~/components/chat/orther_message.vue";
@@ -90,7 +82,7 @@ export default {
     FooterChat,
     Mymess
   },
-  props: ["user_click"],
+  props: ["user_click","mess","coversationId"],
   data: function() {
     return {
       message: [],
@@ -98,7 +90,7 @@ export default {
     };
   },
   beforeMount() {
-    console.log(this.$store.state.user._id)
+    console.log(this.$store.state.user._id);
     socket.emit("online-ping", this.$store.state.user._id);
   },
   mounted: function() {
@@ -106,11 +98,9 @@ export default {
   },
   watch: {
     user_click(val) {
-      if (val.name) {
-        var messages = list.filter(user => val.name == user.name);
-        this.message = messages[0].m;
-        this.scrollToEnd();
-      }
+
+      console.log(val);
+      this.user_click = val;
     }
   },
   updated() {

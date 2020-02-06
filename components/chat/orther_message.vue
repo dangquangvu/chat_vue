@@ -2,7 +2,7 @@
   <div class="clearfix">
     <div class="message-data align-right ">
       <span class="message-data-time">10:14 AM, Today</span> &nbsp; &nbsp;
-      <span class="message-data-name">Olia</span>
+      <span class="message-data-name">{{name}}</span>
       <font-awesome-icon
         :icon="['fas', 'circle']"
         style="color:#94c2ed; font-size:8px ;margin-right: 3px;font-size: 10px"
@@ -75,6 +75,6 @@
 </style>
 <script>
 export default {
-  props: ["chat"]
+  props: ["chat","name"]
 };
 </script>

@@ -6,7 +6,7 @@
         :icon="['fas', 'circle']"
         style="color:#86BB71; font-size:8px ;margin-right: 3px;font-size: 10px"
         class="me"
-      /> Vincent</span
+      /> {{name}}</span
       >
       <span class="message-data-time">10:12 AM, Today</span>
     </div>
@@ -15,6 +15,12 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  props: ["chat","name"]
+};
+</script>
+
 <style scoped lang="scss">
 $green: #86BB71;
 $blue: #94C2ED;
@@ -75,8 +81,3 @@ $gray: #92959E;
   }
 }
 </style>
-<script>
-export default {
-  props: ["chat"]
-};
-</script>

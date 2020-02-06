@@ -7,7 +7,9 @@ export const state = () => ({
     conversation: {},
     currentConversationId: null,
     recipientUserID: null,
-    fetched: null
+    fetched: null,
+    ticked: {},
+    messages: []
 });
 
 export const getters = {
@@ -18,6 +20,9 @@ export const getters = {
     },
     recipientUser(state) {
         return state.users ? state.users[state.recipientUserID] : null;
+    },
+    getMess(state) {
+        return state.messages;
     }
 };
 
@@ -36,11 +41,18 @@ export const mutations = {
         localStorage.removeItem("accessToken");
     },
     setUser(state, user) {
+        user.online = true;
         state.user = user;
     },
     reset: state => {
         state.token = null;
         state.user = {};
+    },
+    setTicked(state, conversationId) {
+        state.ticked = conversationId;
+    },
+    pushMess(state, obj) {
+        state.messages.push(obj);
     }
 };
 

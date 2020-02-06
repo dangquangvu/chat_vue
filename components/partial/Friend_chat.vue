@@ -1,7 +1,8 @@
 <template>
   <v-container
-    class="p-0 m-0"
+    class="p-0 m-0 "
     v-if="this.friend.email != this.$store.state.user.email"
+    :style="bind"
   >
     <v-row class=" d-flex justify-center m-0">
       <v-col sm="1" class="p-0"> </v-col>
@@ -50,6 +51,51 @@
     </v-row>
   </v-container>
 </template>
+
+<script>
+export default {
+  props: ["friend", "bind"],
+  data() {
+    return {
+      online: false,
+      isActive: false,
+      active_user: {
+        color: "#02fd02",
+        fontSize: "8px"
+      },
+      disactive_user: {
+        color: "#dd691c",
+        fontSize: "8px"
+      }
+    };
+  },
+  watch: {
+    online() {
+      return this.online;
+    }
+  },
+  computed: {
+    backgroundStyle() {
+      return {
+        background: this.isActive ? "#21193f" : ""
+      };
+    },
+    buttonStyles() {
+      return {
+        backgroundColor: this.isActive ? "green" : ""
+      };
+    }
+  },
+  methods: {
+    activeThisButton() {
+      // call inactiveAllButtons on parent to deselect all buttons
+      // this.$root.inactiveAllButtons();
+      // // active current button
+      // this.isActive = true;
+    }
+  }
+};
+</script>
 <style scoped>
 #nav_dot_active {
   top: -24px;
@@ -64,27 +110,7 @@
   color: #dd691c;
   font-size: 8px;
 }
+.friend_clicked {
+  background: #21193f;
+}
 </style>
-<script>
-export default {
-  props: ["friend"],
-  data() {
-    return {
-      online: false,
-      active_user: {
-        color: "#02fd02",
-        fontSize: "8px"
-      },
-      disactive_user: {
-        color: "#dd691c",
-        fontSize: "8px"
-      }
-    };
-  },
-  watch: {
-    online(){
-      return this.online;
-    }
-  }
-};
-</script>

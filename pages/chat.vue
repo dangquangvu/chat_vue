@@ -61,19 +61,20 @@
       <v-container class="p-0" style="max-width:900px">
         <v-row class="mb-6">
           <v-col md="4" class="px-0">
-            <v-card
-              class="pa-2"
-              style="height:700px"
-              outlined
-              tile
-              id="nav_chat"
-            >
-              <NavChat @userClick="userClick" />
+            <v-card class="" style="height:700px" outlined tile id="nav_chat">
+              <NavChat
+                @userClick="userClick"
+                :conversationId="conversationID"
+              />
             </v-card>
           </v-col>
           <v-col md="8" class="px-0" style="">
             <v-card class="p-0" style="height:700px" outlined>
-              <ChatArea :user_click="friend_click" />
+              <ChatArea
+                :user_click="friend_click"
+                :mess="messages"
+                :coversationId="conversationID"
+              />
             </v-card>
           </v-col>
         </v-row>
@@ -95,7 +96,8 @@ import ChatArea from "~/components/ChatArea.vue";
 import NavChat from "~/components/NavChat.vue";
 import { mdbCard, mdbBtn, mdbIcon } from "mdbvue";
 import io from "socket.io-client";
-import socket from '~/plugins/socket.js'
+import socket from "~/plugins/socket.js";
+import axios from "axios";
 export default {
   components: {
     ChatArea,
@@ -136,23 +138,63 @@ export default {
       title: "Vuetify.js",
       token: "",
       socket: io("http://localhost:3335"),
-      me : null,
-      friends : []
+      me: null,
+      friends: [],
+      messages: [],
+      conversationID: null,
+      formObj :{
+        conversationId : null,
+        mess :[]
+      }
     };
   },
-  created(){
+  created() {
     this.me = this.$store.user;
-  }
-  ,
+  },
   middleware: "authenticated",
   methods: {
     updateScore(newMsg) {
       //this.msg = newMsg;
       //:msg="msg" @updateScore="updateScore"
     },
-    userClick(friend) {
+    async userClick(friend) {
       this.friend_click = friend;
-      console.log(this.friend_click.fullname)
+      console.log(this.friend_click);
+      let i = this.$store.state.user;
+      let conversationId = await axios.get(
+        "http://localhost:3335/admin/conversation",
+        {
+          nameConversation: friend.fullname
+        }
+      );
+      let mess = this.$store.state.messages;
+      let counter = 0;
+      console.log(mess)
+      if (mess) {
+        for (let i = 0; i < mess.length; i++) {
+          if (mess[i].conversationId == conversationId) {
+            this.messages = mess[i];
+            this.conversationID = conversationId;
+            return;
+          }
+        }
+      }
+
+        let data = await axios
+          .post("http://localhost:3335/admin/get_message", {
+            conversationId: conversationId
+          })
+          .then(dt => {
+            this.messages = dt.data.message;
+            this.conversationID = dt.data.conversationID._id;
+            this.$store.commit("setTicked", friend._id);
+            this.formObj.conversationId = this.conversationID;
+            this.formObj.mess = this.messages;
+            this.$store.commit("pushMess", this.formObj);
+            console.log( this.formObj);
+          })
+          .catch(err => {});
+      
     },
     logOut() {
       console.log("logout");
