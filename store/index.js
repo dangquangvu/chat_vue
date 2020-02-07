@@ -51,7 +51,7 @@ export const mutations = {
         state.messages.map(element => {
             if (element.conversationId == obj.conversationId) {
                 element.mess.push(obj);
-                console.log(element.mess);
+                // console.log(element.mess);
             }
         });
     }
@@ -79,15 +79,14 @@ export const actions = {
         });
     },
     async sendMessServer({ commit }, obj) {
-        commit("pushMess", obj);
-        await axios
-            .post("http://localhost:3335/message/send_message", {
-                message: obj
-            })
-            .then(data => {
-                console.log(data, 111);
-                return;
-            });
+        let data = await axios.post("http://localhost:3335/message/send_message", {
+            message: obj
+        });
+        if (data) {
+            commit("pushMess", obj);
+            socket.emit("send_message", obj);
+            console.log("sendMessServer");
+        }
     }
 };
 

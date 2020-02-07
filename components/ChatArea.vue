@@ -97,6 +97,10 @@ export default {
   beforeMount() {
     console.log(this.$store.state.user._id);
     socket.emit("online-ping", this.$store.state.user._id);
+    socket.on('new-message', (message) => {
+      console.log(message.conversationId ,message , 'new-message')
+      this.$store.commit("pushMess", message);
+    })
   },
   mounted: function() {
     console.log("xxx");

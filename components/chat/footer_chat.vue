@@ -35,7 +35,6 @@ export default {
   methods: {
     onSubmit() {
       if (this.message != "") {
-        console.log(this.$store.state.conversationIdTicked , 'is')
         let object =  {
           conversationId: this.$store.state.conversationIdTicked,
           body: this.message,
