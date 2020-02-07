@@ -41,7 +41,11 @@
         style="width:100%;background:#B8D7D5"
       >
         <div v-for="(item, index) in mess" :key="index">
-          <Mymess v-if="item.author == user_click._id" :chat="item.body" :name="item.nameAuthor" />
+          <Mymess
+            v-if="item.author == user_click._id"
+            :chat="item.body"
+            :name="item.nameAuthor"
+          />
           <OtherChat v-else :chat="item.body" :name="item.nameAuthor" />
         </div>
         <!-- <div>{{mess}}</div> -->
@@ -56,7 +60,7 @@
         style="background:#e5e5fe"
       >
         <FooterChat
-          :nameFriend="user_click.name"
+          :friendClick="user_click"
           @updateMessage="updateMessage($event)"
         />
       </v-card>
@@ -75,6 +79,7 @@ import OtherChat from "~/components/chat/orther_message.vue";
 import Mymess from "~/components/chat/my_message.vue";
 import FooterChat from "~/components/chat/footer_chat.vue";
 import socket from "~/plugins/socket.js";
+import { mapState, mapGetters } from "vuex";
 export default {
   name: "chat-area",
   components: {
@@ -82,7 +87,7 @@ export default {
     FooterChat,
     Mymess
   },
-  props: ["user_click","mess","coversationId"],
+  props: ["user_click", "mess", "coversationId"],
   data: function() {
     return {
       message: [],
@@ -96,26 +101,25 @@ export default {
   mounted: function() {
     console.log("xxx");
   },
-  watch: {
-    user_click(val) {
-      this.user_click = val;
-    }
-  },
   updated() {
     // whenever data changes and the component re-renders, this is called.
     this.$nextTick(() => this.scrollToEnd());
   },
   methods: {
     updateMessage(obj) {
-      let user = list.filter(user => obj.name == user.name);
-      let msg = { msg: obj.message };
-      user[0].m.push(msg);
+      let mess = this.$store.state.messages;
+      this.$store.dispatch("sendMessServer", obj);
       this.scrollToEnd();
     },
     scrollToEnd: function() {
       var container = this.$el.querySelector("#scroll-target");
       let y = container.scrollHeight;
       container.scrollTop = container.scrollHeight;
+    }
+  },
+  watch: {
+    user_click(val) {
+      this.user_click = val;
     }
   }
 };

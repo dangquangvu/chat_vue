@@ -23,28 +23,36 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
-  props:['nameFriend'],
+  props:['friendClick'],
   data() {
     return {
-      name : this.nameFriend,
+      friend : this.friendClick,
       message: ""
     };
   },
   methods: {
     onSubmit() {
       if (this.message != "") {
-        let object = {
-          name : this.nameFriend,
-          message : this.message
-        }
-        console.log(object);
+        console.log(this.$store.state.conversationIdTicked , 'is')
+        let object =  {
+          conversationId: this.$store.state.conversationIdTicked,
+          body: this.message,
+          author: this.$store.state.user._id,
+          nameAuthor: this.$store.state.user.fullname,
+          createdAt :moment.utc().format(),
+          updatedAt : moment.utc().format()
+        };
+        //moment.utc(date).local().format();
+        // console.log(object );
         this.updateMessage(object)
         this.message = "";
       }
     },
     updateMessage(message) {
       this.$emit('updateMessage',message)
+      // console.log(message)
     }
   }
 };

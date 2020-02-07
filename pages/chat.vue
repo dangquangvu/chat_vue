@@ -150,20 +150,25 @@ export default {
   },
   middleware: "authenticated",
   computed: {
-    ...mapState(["messages"])
+    messages(){
+      return this.messages;
+    }
   },
   methods: {
     async userClick(friend) {
       this.friend_click = friend;
       let i = this.$store.state.user;
+      let arrPartner = [friend._id, this.$store.state.user._id]
+      // console.log(arrPartner)
       let dataId = await axios.post(
-        "http://localhost:3335/admin/conversationId",
+        "http://localhost:3335/conversation/conversationId",
         {
-          nameConversation: friend.fullname
+          nameConversation: friend.fullname,
+          arrPartner : arrPartner
         }
       );
       let conversationId = dataId.data.conversationID;
-      // console.log(conversationId);
+      // console.log(dataId , conversationId);
       let mess = this.$store.state.messages;
       let counter = 0;
       // console.log(mess.__ob__.value, 'out');
@@ -173,13 +178,15 @@ export default {
           this.messages = mess[i].mess;
           this.conversationID = conversationId;
           counter = 1;
-          console.log(mess[i].conversationId, i, conversationId);
+          console.log(mess[i], i, conversationId);
+          this.$store.commit("setTicked", friend._id);
+          this.$store.commit("setConversation", conversationId );
           return;
         }
       }
       if (counter == 0) {
         let data = await axios
-          .post("http://localhost:3335/admin/get_message", {
+          .post("http://localhost:3335/message/get_message", {
             conversationId: conversationId
           })
           .then(dt => {
@@ -191,9 +198,10 @@ export default {
             this.conversationID = dt.data.conversationID;
             console.log('call server');
             this.$store.commit("setTicked", friend._id);
-            formObj.conversationId = this.conversationID;
+            this.$store.commit("setConversation", conversationId );
+            formObj.conversationId = conversationId;
             formObj.mess = this.messages;
-            this.$store.commit("pushMess", formObj);
+            this.$store.commit("pullMess", formObj);
             // console.log(formObj);
           });
       }

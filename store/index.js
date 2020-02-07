@@ -4,23 +4,13 @@ import socket from "~/plugins/socket.js";
 export const state = () => ({
     token: null,
     user: {},
-    conversation: {},
-    currentConversationId: null,
-    recipientUserID: null,
+    conversationIdTicked: {},
     fetched: null,
     ticked: {},
     messages: []
 });
 
 export const getters = {
-    currentConversation(state) {
-        return state.currentConversationId ?
-            state.conversations[state.currentConversationId] :
-            null;
-    },
-    recipientUser(state) {
-        return state.users ? state.users[state.recipientUserID] : null;
-    },
     getMess(state) {
         return state.messages;
     }
@@ -48,11 +38,22 @@ export const mutations = {
         state.token = null;
         state.user = {};
     },
-    setTicked(state, conversationId) {
-        state.ticked = conversationId;
+    setTicked(state, friendId) {
+        state.ticked = friendId;
+    },
+    setConversation(state, conversationIdTicked) {
+        state.conversationIdTicked = conversationIdTicked;
+    },
+    pullMess(state, obj) {
+        state.messages.push(obj);
     },
     pushMess(state, obj) {
-        state.messages.push(obj);
+        state.messages.map(element => {
+            if (element.conversationId == obj.conversationId) {
+                element.mess.push(obj);
+                console.log(element.mess);
+            }
+        });
     }
 };
 
@@ -72,10 +73,21 @@ export const actions = {
     },
     getFriend(data) {
         let friends = [];
-        axios.get("http://localhost:3335/admin/friends").then(data => {
+        axios.get("http://localhost:3335/message/friends").then(data => {
             console.log(data, 111);
             return;
         });
+    },
+    async sendMessServer({ commit }, obj) {
+        commit("pushMess", obj);
+        await axios
+            .post("http://localhost:3335/message/send_message", {
+                message: obj
+            })
+            .then(data => {
+                console.log(data, 111);
+                return;
+            });
     }
 };
 
